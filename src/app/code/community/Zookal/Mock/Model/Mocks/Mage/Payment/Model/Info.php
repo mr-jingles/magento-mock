@@ -16,6 +16,17 @@
  */
 class Mage_Payment_Model_Info extends Zookal_Mock_Model_Mocks_Abstract
 {
+    const METHOD_NAME = 'mockPay';
+
+    /**
+     * Needed in Mage_Sales_Model_Service_Quote::_validate()
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return self::METHOD_NAME;
+    }
 
     /**
      * Needed in Mage_Sales_Model_Order::canEdit
@@ -32,7 +43,15 @@ class Mage_Payment_Model_Info extends Zookal_Mock_Model_Mocks_Abstract
     public function getIterator()
     {
         return new ArrayIterator(array(
-            new self()
+            new Zookal_Mock_Model_Mocks_Mage_Payment_Model_Quote_Payment()
         ));
+    }
+
+    /**
+     * @needed Mage_Adminhtml_Model_Sales_Order_Create::_validate()
+     * @return bool
+     */
+    public function isAvailable(){
+        return true;
     }
 }

@@ -1,6 +1,20 @@
 Zookal Mock Objects
 ===================
 
+## This branch contains the trial to mock a disabled and removed Mage_Payment module.
+
+Spending hours of investigation ... the Mage_Payment module is so deeply coupled with Sales and Checkout that it is
+not easily possible to get rid of the payment module.
+
+### Frontend checkout saveOrder
+
+After fixing opcheckout.js the frontend order step will fail at `Mage_Sales_Model_Quote::prepareRecurringPaymentProfiles`
+because of the flag `getTotalsCollectedFlag()` which has not been set.
+
+### Backend save order
+
+`Mage_Sales_Model_Quote_Payment::getMethodInstance()` fails because the `$this->getQuote()` is empty ...
+
 ##### TL;DR: Transparent autodetecting of disabled core modules and extensions and providing mock objects for not breaking Magento. Nothing to configure. No class rewrites. Only one observer. Works out of the box.
 
 If you try to disable e.g. Mage_Newsletter or Mage_Wishlist or ... and you call certain parts of the backend or some rare parts of the frontend you will get errors that Magento cannot find the class XYZ. Best examples are the two previoulsy mentioned. If you have disabled them and you open in the backend a customer entry to edit it, the page will generate an error. Mage_Customer Edit has many dependencies with other modules. So the **Zookal Mock Module** will provide you mock objects which catches all method calls to disabled classes of that modules without breaking anything.
@@ -19,7 +33,6 @@ If one or all of the following modules (until now) are disabled they will then b
 - Mage_Tag
 - Mage_Tax
 - Mage_Shipping
-- Mage_Payment
 - Mage_Log
 - Mage_Backup
 - Mage_Customer

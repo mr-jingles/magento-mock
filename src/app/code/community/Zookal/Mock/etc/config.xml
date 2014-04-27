@@ -40,6 +40,10 @@
                     </zookal_mock_create_mock>
                 </observers>
             </controller_front_init_before>
+        </events>
+    </global>
+    <frontend>
+        <events>
             <controller_action_layout_load_before>
                 <observers>
                     <zookal_mock_payment_disabled>
@@ -48,9 +52,16 @@
                     </zookal_mock_payment_disabled>
                 </observers>
             </controller_action_layout_load_before>
+
+            <controller_action_postdispatch_checkout_onepage_saveShippingMethod>
+                <observers>
+                    <zookal_mock_payment_disabled>
+                        <class>zookal_mock/observerController</class>
+                        <method>afterSaveShippingMethod</method>
+                    </zookal_mock_payment_disabled>
+                </observers>
+            </controller_action_postdispatch_checkout_onepage_saveShippingMethod>
         </events>
-    </global>
-    <frontend>
         <layout>
             <updates>
                 <zookal_mock>
