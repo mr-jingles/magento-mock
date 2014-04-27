@@ -40,8 +40,25 @@
                     </zookal_mock_create_mock>
                 </observers>
             </controller_front_init_before>
+            <controller_action_layout_load_before>
+                <observers>
+                    <zookal_mock_payment_disabled>
+                        <class>zookal_mock/observer</class>
+                        <method>paymentCheckoutLayoutUpdate</method>
+                    </zookal_mock_payment_disabled>
+                </observers>
+            </controller_action_layout_load_before>
         </events>
     </global>
+    <frontend>
+        <layout>
+            <updates>
+                <zookal_mock>
+                    <file>zookal_mock.xml</file>
+                </zookal_mock>
+            </updates>
+        </layout>
+    </frontend>
     <adminhtml>
         <translate>
             <modules>

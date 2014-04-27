@@ -1,3 +1,4 @@
 src/app/etc/modules/*					app/etc/modules/
 src/app/code/community/Zookal/Mock		app/code/community/Zookal/Mock
 src/app/locale/en_US/Zookal_Mock.csv    app/locale/en_US/Zookal_Mock.csv
+src/app/design/frontend/base/default/layout/zookal_mock.xml app/design/frontend/base/default/layout/zookal_mock.xml

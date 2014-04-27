@@ -33,6 +33,7 @@ class Zookal_Mock_Model_Observer
         'Mage_Review'         => 'review',
         'Mage_Reports'        => 'reports',
         'Mage_Rating'         => 'rating',
+        'Mage_Payment'        => 'payment',
         'Mage_ProductAlert'   => 'productalert',
         'Mage_Newsletter'     => 'newsletter',
         'Mage_Log'            => 'log',
@@ -59,6 +60,7 @@ class Zookal_Mock_Model_Observer
         'Mage_GoogleCheckout' => '_mageGoogleCheckout',
         'Mage_Log'            => '_mageMockIncludePath',
         'Mage_ProductAlert'   => '_mageMockHelper',
+        'Mage_Payment'        => '_magePayment',
         'Mage_Review'         => '_mageMockHelper',
         'Mage_Shipping'       => '_mageMockHelperIncludePath',
         'Mage_Tag'            => '_mageMockIncludePath',
@@ -67,6 +69,11 @@ class Zookal_Mock_Model_Observer
         'Mage_Wishlist'       => '_mageMockHelper',
         'Mage_Weee'           => '_mageMockHelperIncludePath',
     );
+
+    /**
+     * @var bool
+     */
+    protected $_paymentModuleIsDisabled = false;
 
     /**
      * To use this in a shell script call it: Mage::getModel('zookal_mock/observer')->mockDisabledModules();
@@ -187,6 +194,33 @@ class Zookal_Mock_Model_Observer
     }
 
     /**
+     * Special case when Mage_Payment is disabled
+     * Mage_Sales payment collection resource model must be overwritten.
+     * Automatic detection if there is already a rewrite of the Mage_Sales_Model_Resource_Order_Payment_Collection model
+     *
+     * @param $pathPrefix
+     * @param $moduleName
+     * @param $resource
+     */
+    protected function _magePayment($pathPrefix, $moduleName, $resource)
+    {
+        $this->_mageMockHelperIncludePath($pathPrefix, $moduleName, $resource);
+
+        $paymentNodes = array(
+            $pathPrefix . 'sales_resource/rewrite/order_payment_collection',
+            $pathPrefix . 'sales_resource/rewrite/quote_payment_collection',
+        );
+
+        foreach ($paymentNodes as $nodePath) {
+            $hasNoRewriteNode = (string)Mage::getConfig()->getNode($nodePath) === '';
+            if (true === $hasNoRewriteNode) {
+                $this->_setConfigNode($nodePath, 'Zookal_Mock_Model_Resource_Sales_OrderQuote_Payment_Collection');
+            }
+        }
+        $this->_paymentModuleIsDisabled = true;
+    }
+
+    /**
      * Special case when Mage_Tax is disabled and Mage_Customer is enabled
      * Mage_Customer needs the tax_class table name for joining
      *
@@ -265,5 +299,39 @@ class Zookal_Mock_Model_Observer
             $prefixes['stores/' . $store->getCode()] = 'stores/' . $store->getCode();
         }
         return $prefixes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaymentModuleDisabled()
+    {
+        return $this->_paymentModuleIsDisabled;
+    }
+
+    /**
+     * @fire controller_action_layout_generate_blocks_after
+     *
+     * @param Varien_Event_Observer $observer
+     *
+     * @return null
+     */
+    public function paymentCheckoutLayoutUpdate(Varien_Event_Observer $observer)
+    {
+        if (false === $this->_paymentModuleIsDisabled) {
+            return null;
+        }
+        /** @var Mage_Checkout_Controller_Action $action */
+        $action = $observer->getEvent()->getAction();
+
+        if (!($action instanceof Mage_Checkout_Controller_Action)) {
+            return null;
+        }
+
+        /** @var Mage_Core_Model_Layout $layout */
+        $layout = $observer->getEvent()->getLayout();
+        $layout->getUpdate()->addHandle('zookal_mock_remove_payment');
+
+        return null;
     }
 }

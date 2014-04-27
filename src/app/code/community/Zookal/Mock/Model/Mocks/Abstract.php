@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) Zookal Pty Ltd
  * @license     OSL - Open Software Licence 3.0 | http://opensource.org/licenses/osl-3.0.php
  */
-abstract class Zookal_Mock_Model_Mocks_Abstract
+abstract class Zookal_Mock_Model_Mocks_Abstract implements IteratorAggregate
 {
 
     /**
@@ -27,8 +27,10 @@ abstract class Zookal_Mock_Model_Mocks_Abstract
         'loa'            => 1, // e.g. load and loadBy....
         'lim'            => 1, // e.g. limit() -> on collection
         'ord'            => 1, // e.g. orderByTotalAmount
+        'pay'            => 1, // e.g. invoice getPayment() -> pay
         'pre'            => 1, // e.g. prepare()
         'resetsortorder' => 1,
+        'refund'         => 1, // creditmemo refund
         'renewsession'   => 1,
         'sav'            => 1, // e.g. save()
         'set'            => 1,
@@ -156,5 +158,14 @@ abstract class Zookal_Mock_Model_Mocks_Abstract
     public function getMockMethodsReturnThis()
     {
         return $this->_mockMethodsReturnThis;
+    }
+
+    /**
+     * Implementation of IteratorAggregate::getIterator()
+     * @return null
+     */
+    public function getIterator()
+    {
+        return null;
     }
 }

@@ -24,6 +24,7 @@ class Zookal_Mock_Model_Config extends Mage_Core_Model_Config
      * @var array
      */
     protected $_dependencyLiars = array(
+        'Mage_Sales'         => array('Mage_Payment'),
         'Mage_Reports'       => array('Mage_Sales', 'Mage_Customer'),
         'Mage_Log'           => array('Mage_Customer'),
         'Mage_Tax'           => array('Mage_Customer'),

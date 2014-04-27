@@ -19,6 +19,7 @@ If one or all of the following modules (until now) are disabled they will then b
 - Mage_Tag
 - Mage_Tax
 - Mage_Shipping
+- Mage_Payment
 - Mage_Log
 - Mage_Backup
 - Mage_Customer
@@ -111,7 +112,11 @@ I've disabled module FooBar but still getting errors regarding dependency?
 
 Let's say you disabled Mage_Dataflow but enabled Mage_Catalog and the system is presenting you:
 
-    "Mage_Catalog" requires module "Mage_Dataflow"
+    Module "Mage_Catalog" requires module "Mage_Dataflow".
+
+or
+
+    Module "Mage_Sales" requires module "Mage_Payment".
 
 You have two possibilities:
 
@@ -125,6 +130,20 @@ Mage::run($mageRunCode, $mageRunType, array(
 ```
 
 The config model `Zookal_Mock_Model_Config` will automatically resolve invalid dependencies for disabled modules. But some dependency really make sense ;-)
+
+### ProTip for Mage_Payment
+
+If you disable and/or remove `Mage_Payment` make sure that you also disable and/or remove all other payment modules like:
+
+- Mage_Paygate
+- Mage_GoogleCheckout
+- Mage_Paypal
+- Mage_PaypalUk
+- Mage_Authorizenet
+- Mage_Centinel
+- Phoenix_Moneybookers
+
+Proceed then with the step *How do I uninstall a payment module?* if your sales_flat_* tables aren't empty.
 
 I've disabled Mage_[Bundle|Rating|Review|Wishlist|Usa] but getting a weird error!
 ----------------------------------------------------
