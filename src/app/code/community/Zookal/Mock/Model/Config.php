@@ -37,6 +37,7 @@ class Zookal_Mock_Model_Config extends Mage_Core_Model_Config
         'Mage_Persistent'    => array('Mage_Adminhtml'),
         'Mage_Captcha'       => array('Mage_Adminhtml'),
         'VinaiKopp_LoginLog' => array('Mage_Adminhtml'),
+        'Centerfy_DefaultTheme' => array('Mage_Core','Mage_Catalog','Mage_Sales','Mage_Tax','FireGento_Pdf'),
     );
 
     /**
